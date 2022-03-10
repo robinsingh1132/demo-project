@@ -14,15 +14,19 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('register', 'App\Http\Controllers\API\AuthController@register')->name('register');
-Route::post('login', 'App\Http\Controllers\API\AuthController@login')->name('login');
-Route::post('password/email', 'App\Http\Controllers\API\AuthController@forgot')->name('forgot');
-Route::post('password/reset', 'App\Http\Controllers\API\AuthController@reset')->name('reset');
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('logout', 'App\Http\Controllers\API\AuthController@logout')->name('logout');
+Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
+    Route::post('register', 'AuthController@register')->name('register');
+    Route::post('login', 'AuthController@login')->name('login');
+    Route::post('password/email', 'AuthController@forgot')->name('forgot');
+    Route::post('password/reset', 'AuthController@reset')->name('reset');
 
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('logout', 'AuthController@logout')->name('logout');
+    });
 });
+
+
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
