@@ -57,14 +57,20 @@ class AuthController extends Controller
             $response = [
                 'user' => $user,
                 'token' => $token,
+                'success' => 'Logged in sucessfully!'
             ];
             return response($response, 200);
         }
     }
     public function forgot() {
         $credentials = request()->validate(['email' => 'required|email']);
+        $user = User::where('email', $credentials['email'])->first();
+        if(!$user){
+            return response(['message' => 'Please try with your registered email'], 401);
+        }else{
         Password::sendResetLink($credentials);
-        return response()->json(["message" => 'Reset password link sent on your email id.']);
+        return response()->json(["data"=>$credentials, "message" => 'Reset password link sent on your email id.']);
+        }
     }
 
     public function reset() {
